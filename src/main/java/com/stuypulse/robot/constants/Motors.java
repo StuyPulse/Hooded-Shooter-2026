@@ -32,6 +32,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
  */
 public interface Motors {
 
+    public interface Shooter {
+         TalonFXConfiguration configs = new TalonFXConfiguration();
+    }
+
+    public interface Hood {
+         TalonFXConfiguration configs = new TalonFXConfiguration();
+    }
+
     /** Classes to store all of the values a motor needs */
 
     public static class TalonFXConfig {

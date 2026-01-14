@@ -12,4 +12,10 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface HDSR {
+        int LEADER = 0;
+        int FOLLOWER = 1;
+        int HOOD_MOTOR = 2;
+    }
 }
