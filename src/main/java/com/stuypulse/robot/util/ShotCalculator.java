@@ -1,4 +1,4 @@
-// BORROWED CODE FROM 868!!! Go through and document/revise anything if needed ourselves. gracias
+// BORROWED CODE FROM 868!!! some stuffs added/edited like yaw calcumulations. gracias
 
 package com.stuypulse.robot.util;
 
@@ -7,6 +7,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import java.util.function.Function;
 
@@ -259,6 +260,17 @@ public final class ShotCalculator {
         double t = sol.flightTimeSeconds();
         Pose3d effectiveTarget = targetPose;
 
+        Translation3d s = shooterPose.getTranslation();
+        Translation3d et = effectiveTarget.getTranslation();
+
+        // all the poses we pass in are field relative, 
+        // so calculated yaw (turret angle) should be field relative as well... right
+
+        double yaw = Math.atan2(
+            et.getY() - s.getY(),
+            et.getX() - s.getX()
+        );
+            
         for (int i = 0; i < maxIterations; i++) {
 
             double dx = fieldRelRobotVelocity.vxMetersPerSecond * t;
@@ -284,7 +296,7 @@ public final class ShotCalculator {
                         newSol.launchPitchRad(),
                         newSol.launchSpeed(),
                         newSol.flightTimeSeconds(),
-                        0);
+                        yaw);   
             }
 
             sol = newSol;
@@ -296,6 +308,6 @@ public final class ShotCalculator {
                 sol.launchPitchRad(),
                 sol.launchSpeed(),
                 sol.flightTimeSeconds(),
-                0);
+                yaw);
     }
 }

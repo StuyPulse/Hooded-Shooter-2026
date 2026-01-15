@@ -16,7 +16,7 @@ import com.stuypulse.stuylib.network.SmartNumber;
  */
 public interface Settings {
     public interface Shooter {
-        SmartNumber shooterRpmTollerance = new SmartNumber("HoodedShooter/Shooter/ shooterRpmTollerance", 50);
+        SmartNumber shooterRpmTolerance = new SmartNumber("HoodedShooter/Shooter/ shooterRpmTolerance", 50);
     
         
     }

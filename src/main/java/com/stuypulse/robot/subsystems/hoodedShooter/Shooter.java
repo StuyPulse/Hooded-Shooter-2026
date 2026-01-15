@@ -33,6 +33,10 @@ public abstract class Shooter extends SubsystemBase {
         return state;
     }
 
+    public void setShooterState(ShooterState state) {
+        this.state = state;
+    }
+
     protected Shooter() {
         state = ShooterState.STOW;
     }
