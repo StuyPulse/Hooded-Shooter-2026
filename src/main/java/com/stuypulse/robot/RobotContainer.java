@@ -37,7 +37,9 @@ public class RobotContainer {
     /*** DEFAULTS ***/
     /****************/
 
-    private void configureDefaultCommands() {}
+    private void configureDefaultCommands() {
+        
+    }
 
     /***************/
     /*** BUTTONS ***/

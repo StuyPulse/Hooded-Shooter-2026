@@ -15,7 +15,7 @@ public class HoodImpl extends Hood {
         super();
         hoodMotor = new TalonFX(Ports.HDSR.HOOD_MOTOR);
         Motors.Hood.configs.configure(hoodMotor);
-    } 
+    }
 
     @Override
     public Rotation2d getCurrentAngle() {
@@ -24,7 +24,7 @@ public class HoodImpl extends Hood {
 
     @Override 
     public void periodic() {
-        hoodMotor.setControl(new PositionVoltage(getCurrentAngle().getRotations()));
+        hoodMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
     }
 
         
