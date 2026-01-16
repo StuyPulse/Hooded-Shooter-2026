@@ -61,4 +61,9 @@ public class Constants {
         double SHOT_RPM = 0;
         double FERRY_RPM = 0;
     }
+
+    public interface Align {
+        int MAX_ITERATIONS = 5;
+        double TIME_TOLERANCE = 0.01;
+    }
 }
