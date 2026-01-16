@@ -5,6 +5,8 @@
 
 package com.stuypulse.robot;
 
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -13,6 +15,7 @@ public class Robot extends TimedRobot {
 
     private RobotContainer robot;
     private Command auto;
+    private static Alliance alliance;
 
     /*************************/
     /*** ROBOT SCHEDULEING ***/
@@ -21,11 +24,21 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robot = new RobotContainer();
+        alliance = Alliance.Blue;
+
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+
+        if (DriverStation.getAlliance().isPresent()) {
+            alliance = DriverStation.getAlliance().get();
+        }
+    }
+
+    public static boolean isBlue() {
+        return alliance == Alliance.Blue;
     }
 
     /*********************/

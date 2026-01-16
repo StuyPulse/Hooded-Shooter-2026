@@ -20,6 +20,10 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 /*-
  * File containing all of the configurations that different motors require.
@@ -31,7 +35,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
  *  - The Open Loop Ramp Rate
  */
 public interface Motors {
-
     public interface Shooter {
          TalonFXConfig configs = new TalonFXConfig();
     }
@@ -41,6 +44,30 @@ public interface Motors {
          TalonFXConfig configs = new TalonFXConfig();
     }
 
+    public interface Swerve {
+        public interface Turn {
+            SparkBaseConfig motorConfig = new SparkMaxConfig()
+                .inverted(false)
+                .smartCurrentLimit(200)
+                .openLoopRampRate(0.25)
+                .idleMode(IdleMode.kBrake)
+                .apply(
+                    new EncoderConfig()
+                        .positionConversionFactor(Constants.Swerve.Encoder.Drive.POSITION_CONVERSION)
+                        .velocityConversionFactor(Constants.Swerve.Encoder.Drive.POSITION_CONVERSION / 60.0));
+        }
+        public interface Drive {
+            SparkBaseConfig motorConfig = new SparkMaxConfig()
+                .smartCurrentLimit(200)
+                .openLoopRampRate(0.25)
+                .idleMode(IdleMode.kBrake)
+                .apply(
+                    new EncoderConfig()
+                        .positionConversionFactor(Constants.Swerve.Encoder.Drive.POSITION_CONVERSION)
+                        .velocityConversionFactor(Constants.Swerve.Encoder.Drive.POSITION_CONVERSION / 60.0));
+        }
+    }
+   
     /** Classes to store all of the values a motor needs */
 
     public static class TalonFXConfig {

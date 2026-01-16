@@ -6,7 +6,10 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
+import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
+import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
@@ -21,6 +24,7 @@ public class RobotContainer {
     public final Gamepad operator = new AutoGamepad(Ports.Gamepad.OPERATOR);
     
     // Subsystem
+    public final SwerveDrive swerve = SwerveDrive.getInstance();
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -31,6 +35,8 @@ public class RobotContainer {
         configureDefaultCommands();
         configureButtonBindings();
         configureAutons();
+
+        SmartDashboard.putData("Field", Field.FIELD2D);
     }
 
     /****************/
@@ -38,7 +44,7 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        
+        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
     }
 
     /***************/
