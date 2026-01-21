@@ -2,17 +2,12 @@
 
 package com.stuypulse.robot.util;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import java.util.function.Function;
 
 public final class ShotCalculator {
-    public static final double GRAVITY = 9.81;
+    public static final double g = 9.81; // gravity is not a number
 
     public record ShotSolution(
             double launchPitchRad,
@@ -41,15 +36,14 @@ public final class ShotCalculator {
         }
 
         double v2 = launchSpeed * launchSpeed;
-        double g = GRAVITY;
 
         double discriminant = v2 * v2 - g * (g * d * d + 2.0 * dz * v2);
         if (discriminant < 0) {
             return new ShotSolution(0, 0, 0);
         }
 
-        // LOW-ARC solution (use +Math.sqrt(...) for high arc)
-        double tanTheta = (v2 + Math.sqrt(discriminant)) / (g * d);
+        // LOW-ARC solution (use + for high arc)
+        double tanTheta = (v2 - Math.sqrt(discriminant)) / (g * d);
 
         double launchPitch = Math.atan(tanTheta);
 
@@ -247,7 +241,6 @@ public final class ShotCalculator {
             Pose3d shooterPose,
             Pose3d targetPose,
             ChassisSpeeds fieldRelRobotVelocity,
-            ChassisAccelerations fieldRelRobotAcceleration,
             double targetSpeedRps,
             int maxIterations,
             double timeTolerance) {
@@ -257,19 +250,11 @@ public final class ShotCalculator {
                 targetPose,
                 targetSpeedRps);
 
+        
         double t = sol.flightTimeSeconds();
+        
         Pose3d effectiveTarget = targetPose;
-
         Translation3d s = shooterPose.getTranslation();
-        Translation3d et = effectiveTarget.getTranslation();
-
-        // all the poses we pass in are field relative, 
-        // so calculated yaw (turret angle) should be field relative as well... right
-
-        double yaw = Math.atan2(
-            et.getY() - s.getY(),
-            et.getX() - s.getX()
-        );
             
         for (int i = 0; i < maxIterations; i++) {
 
@@ -291,17 +276,24 @@ public final class ShotCalculator {
                     targetSpeedRps);
 
             if (Math.abs(newSol.flightTimeSeconds() - t) < timeTolerance) {
-                return new InterceptSolution(
-                        effectiveTarget,
-                        newSol.launchPitchRad(),
-                        newSol.launchSpeed(),
-                        newSol.flightTimeSeconds(),
-                        yaw);   
+                sol = newSol;
+                break;
             }
 
             sol = newSol;
             t = newSol.flightTimeSeconds();
         }
+
+        
+        Translation3d et = effectiveTarget.getTranslation();
+
+        // all the poses we pass in are field relative, 
+        // so calculated yaw (turret angle) should be field relative as well... right
+
+        double yaw = Math.atan2( //atan2(dy, dx)
+            et.getY() - s.getY(),
+            et.getX() - s.getX() 
+        ); 
 
         return new InterceptSolution(
                 effectiveTarget,
