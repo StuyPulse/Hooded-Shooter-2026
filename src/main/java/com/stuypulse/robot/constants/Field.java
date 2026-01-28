@@ -63,7 +63,7 @@ public interface Field {
     /**** EMPTY FIELD POSES ****/
 
     Pose2d EMPTY_FIELD_POSE2D = new Pose2d(new Translation2d(-1, -1), new Rotation2d());
-    Pose3d EMPTY_FIELD_POSE3D = new Pose3d(-1, -1, 0, new Rotation3d());
+    Pose3d hubPose3d = new Pose3d(-1, -1, 0, Rotation3d.kZero);
 
     public static void clearFieldObject(FieldObject2d fieldObject)  {
         fieldObject.setPose(EMPTY_FIELD_POSE2D);

@@ -1,7 +1,7 @@
 package com.stuypulse.robot.commands.hdsr;
 
-import com.stuypulse.robot.subsystems.hoodedShooter.Hood.Hoodstate;
-import com.stuypulse.robot.subsystems.hoodedShooter.Shooter.ShooterState;
+
+import com.stuypulse.robot.subsystems.hdsr.HDSR.State;
 
 public class HDSRShoot extends HDSRSetState {
 
@@ -9,6 +9,6 @@ public class HDSRShoot extends HDSRSetState {
     // swerve
 
     public HDSRShoot() {
-        super(Hoodstate.SHOOT, ShooterState.SHOOT);
+        super(State.SHOOT);
     }
 }
