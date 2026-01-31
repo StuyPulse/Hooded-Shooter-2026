@@ -8,11 +8,13 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.commands.TurretHoodAlignToTarget;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.hdsr.HDSRSetState;
+import com.stuypulse.robot.commands.hdsr.HDSRShoot;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.subsystems.hdsr.HDSR;
 import com.stuypulse.robot.subsystems.hdsr.HDSR.State;
+import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
@@ -30,6 +32,7 @@ public class RobotContainer {
     // Subsystem
     public final SwerveDrive swerve = SwerveDrive.getInstance();
     public final HDSR hdsr = HDSR.getInstance();
+    public final Odometry odometry = Odometry.getInstance();
 
     // Autons
     private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -51,15 +54,15 @@ public class RobotContainer {
     private void configureDefaultCommands() {
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
         hdsr.setDefaultCommand(new TurretHoodAlignToTarget());
-    }
+    }   
 
     /***************/
     /*** BUTTONS ***/
     /***************/
 
     private void configureButtonBindings() {
-        driver.getTopButton().onTrue(
-            new HDSRSetState(State.SHOOT)
+        driver.getLeftButton().onTrue(
+            new HDSRShoot()
         ); //ok
     }
 

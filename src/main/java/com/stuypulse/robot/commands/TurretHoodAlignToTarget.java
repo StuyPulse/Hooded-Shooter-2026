@@ -12,10 +12,11 @@ import com.stuypulse.robot.constants.Field;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command; 
 
 public class TurretHoodAlignToTarget extends Command{
-    private final HDSR hdsr;
+    private HDSR hdsr;
     private final SwerveDrive swerve;
     private final Odometry odometry;
     // private final Turret turret;
@@ -31,13 +32,13 @@ public class TurretHoodAlignToTarget extends Command{
     // int maxIterations,
     // double timeTolerance
     
-    public TurretHoodAlignToTarget(){
+    public TurretHoodAlignToTarget() {
         hdsr = HDSR.getInstance();
         odometry = Odometry.getInstance();
         swerve = SwerveDrive.getInstance();
 
         
-        addRequirements(hdsr);
+        addRequirements(hdsr, odometry);
     }
      
     @Override
@@ -47,13 +48,14 @@ public class TurretHoodAlignToTarget extends Command{
 
     @Override
     public void execute() {
+        
 
         // update targetPose each tick
         if (hdsr.getState() == State.SHOOT) {
             targetPose = Field.hubPose3d;
         }
         else {
-            targetPose = new Pose3d(); // placeholder
+            targetPose = Field.hubPose3d; // placeholder
         }
 
 
@@ -66,6 +68,7 @@ public class TurretHoodAlignToTarget extends Command{
         }
 
         Pose2d currentPose = odometry.getPose();
+        SmartDashboard.putNumber("hdsr/rps", RPS);
 
         InterceptSolution sol = ShotCalculator.solveShootOnTheFly(
             new Pose3d(currentPose), // TODO: add the field relative shooter offset on the robot

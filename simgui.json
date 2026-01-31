@@ -1,0 +1,77 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Autonomous": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Visualizers/Turret": "Mechanism2d"
+    },
+    "windows": {
+      "/SmartDashboard/Autonomous": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Field": {
+        "bottom": 1638,
+        "height": 8.051901817321777,
+        "left": 534,
+        "right": 3466,
+        "top": 291,
+        "width": 17.54825210571289,
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Visualizers/Turret": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "retained": {
+      "SmartDashboard": {
+        "Autonomous": {
+          "open": true
+        },
+        "open": true
+      }
+    },
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      },
+      "SmartDashboard": {
+        "Driver Settings": {
+          "Drive": {
+            "open": true
+          }
+        },
+        "Enabled Subsystems": {
+          "open": true
+        },
+        "Odometry": {
+          "open": true
+        },
+        "Swerve": {
+          "open": true
+        },
+        "Turret": {
+          "open": true
+        },
+        "hdsr": {
+          "open": true
+        },
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}

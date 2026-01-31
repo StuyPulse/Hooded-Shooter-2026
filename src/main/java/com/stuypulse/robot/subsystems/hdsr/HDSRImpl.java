@@ -20,6 +20,7 @@ public class HDSRImpl extends HDSR{
 
     public HDSRImpl() {
         super();
+        
         hoodMotor = new TalonFX(Ports.HDSR.HOOD_MOTOR);
         shooterLeader = new TalonFX(Ports.HDSR.LEADER);
         shooterFollower = new TalonFX(Ports.HDSR.FOLLOWER);
@@ -39,29 +40,13 @@ public class HDSRImpl extends HDSR{
         return shooterLeader.getVelocity().getValueAsDouble() * 60;
     }
 
-    @Override
-    public double getShootRPM() {
-        return Constants.Shooter.SHOT_RPM;
-    }
-
-    @Override 
-    public double getFerryRPM() {
-        return Constants.Shooter.FERRY_RPM; 
-    }
-
-    @Override
-    public boolean spunUp() {
-        return (Math.abs(getTargetRPM() - getFerryRPM()) > Settings.Shooter.shooterRpmTolerance.getAsDouble()) ? true : false;
-    }
-
-
     @Override 
     public void periodic() {
+        super.periodic();
+
         hoodMotor.setControl(new PositionVoltage(getTargetAngle().getRotations()));
 
         shooterLeader.setControl(new VelocityVoltage(getTargetRPM() / 60));
         shooterFollower.setControl(new VelocityVoltage(getTargetRPM() / 60));
-
-        SmartDashboard.putNumber("hdsr/targetShootAngle", getShootAngle().getDegrees());
     }
 }

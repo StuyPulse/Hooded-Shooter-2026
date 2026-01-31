@@ -75,6 +75,7 @@ public class SwerveDrive extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(getModuleOffsets());
 
         module2ds = new FieldObject2d[modules.length];
+
     }
 
     
@@ -83,6 +84,7 @@ public class SwerveDrive extends SubsystemBase {
             module2ds[i] = field.getObject(modules[i].getName()+"-2d");
             module2ds[i].setPose(Robot.isBlue() ? module2ds[i].getPose() : Field.transformToOppositeAlliance(module2ds[i].getPose()));
         }
+
     }
 
     private Translation2d[] getModuleOffsets() {

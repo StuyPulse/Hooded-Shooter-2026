@@ -1,30 +1,46 @@
 package com.stuypulse.robot.subsystems.hdsr;
 
 import com.stuypulse.robot.constants.Constants;
+import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.Robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class HDSR extends SubsystemBase{
-    private static HDSR instance;
-    private State state = State.STOW;
-
-    static {
-        instance = new HDSRImpl();
-    }
-    
-    public static HDSR getInstance(){
-        return instance;
-    }
+    private static final HDSR instance;
+    private State state;
 
     private Rotation2d targetAngle;
     private Rotation2d shootAngle;
     private Rotation2d ferryAngle;
 
+
+    static {
+        if (Robot.isReal())
+            instance = new HDSRImpl();
+        else
+            instance = new HDSRSim();
+    }
+    
+    public static HDSR getInstance(){
+        return instance;
+    }
+    
     public enum State {
         STOW,
         FERRY,
         SHOOT;
+    }
+
+    public HDSR() {
+        state = State.STOW;
+        
+        targetAngle = Rotation2d.kZero;
+        shootAngle = Rotation2d.kZero;
+        ferryAngle = Rotation2d.kZero;
+
     }
 
     public abstract Rotation2d getCurrentAngle();
@@ -47,17 +63,16 @@ public abstract class HDSR extends SubsystemBase{
     }
 
     public void setAngle(Rotation2d angle) { // Debugging
+
         targetAngle = angle;
     }
 
     public void setShootAngle(Rotation2d shootAngle) { // Use this method in commmand with the swerve, turret, and hdsr subsystems
         this.shootAngle = shootAngle;
-        state = State.SHOOT;
     }
 
     public void setFerryAngle(Rotation2d ferryAngle) {
         this.ferryAngle = ferryAngle;
-        state = State.FERRY;
     }
  
     public void setTargetAngle() {
@@ -80,9 +95,27 @@ public abstract class HDSR extends SubsystemBase{
         };
     }
 
-    public abstract double getFerryRPM();
-    public abstract double getShootRPM();
-    public abstract double getFlywheelRPM();
-    public abstract boolean spunUp();
+    
 
+    public double getShootRPM() {
+        return Constants.Shooter.SHOT_RPM;
+    }
+
+    public double getFerryRPM() {
+        return Constants.Shooter.FERRY_RPM; 
+    }
+
+    public boolean spunUp() {
+        double diff = Math.abs(getTargetRPM() - (getState() == State.FERRY ? getFerryRPM() : getShootRPM()));
+        return (diff > Settings.Shooter.shooterRpmTolerance.getAsDouble()) ? true : false;
+    }
+
+    public abstract double getFlywheelRPM();
+
+    @Override 
+    public void periodic() {
+        SmartDashboard.putString("hdsr/state", getState().name());
+        SmartDashboard.putNumber("hdsr/targetShootAngle", getShootAngle().getDegrees());
+        SmartDashboard.putNumber("hdsr/currentAngle", getCurrentAngle().getDegrees());
+    }
 }
