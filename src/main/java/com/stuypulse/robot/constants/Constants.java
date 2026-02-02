@@ -52,11 +52,10 @@ public class Constants {
     }
 
 
-    public interface Hood {
+    public interface HDSR {
         Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(5);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(45);
-    }
-    public interface Shooter {
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(40);
+
         double SHOT_RPM = 4000;
         double FERRY_RPM = 4000;
     }

@@ -2,26 +2,27 @@
 
 package com.stuypulse.robot.util;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Settings;
+
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public final class ShotCalculator {
     public static final double g = 9.81; // gravity is not a number
 
     public record ShotSolution(
-        double launchPitchRad,
-        double launchSpeed,
+        Rotation2d launchPitchAngle,
         double flightTimeSeconds) {
     }
 
-    private ShotCalculator() {
-    }
-
     public static ShotSolution solveBallisticWithSpeed(
-            Pose3d shooterPose,
-            Pose3d targetPose,
-            double launchSpeed) {
+        Pose3d shooterPose,
+        Pose3d targetPose,
+        double launchSpeed) {
 
         Translation3d s = shooterPose.getTranslation();
         Translation3d t = targetPose.getTranslation();
@@ -39,7 +40,7 @@ public final class ShotCalculator {
 
         double discriminant = v2 * v2 - g * (g * d * d + 2.0 * dz * v2);
         if (discriminant < 0) {
-            return new ShotSolution(0, 0, 0);
+            return new ShotSolution(Rotation2d.kZero, 0);
         }
 
         // LOW-ARC solution (use + for high arc)
@@ -50,21 +51,20 @@ public final class ShotCalculator {
         double vHoriz = launchSpeed * Math.cos(launchPitch);
         double time = d / vHoriz;
 
-        return new ShotSolution(launchPitch, launchSpeed, time);
+        return new ShotSolution(Rotation2d.fromRadians(launchPitch), time);
     }
 
 
-    public record InterceptSolution(
-        Pose3d effectiveTargetPose,
-        double launchPitchRad,
-        double launchSpeed,
-        double flightTime,
-        double requiredYaw) {
+    public record AlignAngleSolution(
+        Rotation2d launchPitchAngle,
+        Rotation2d requiredYaw,
+        Pose3d estimateTargetPose) {
     }
 
-    public static InterceptSolution solveShootOnTheFly(
+    public static AlignAngleSolution solveShootOnTheFly(
         Pose3d shooterPose,
         Pose3d targetPose,
+        ChassisSpeeds prevFieldRelRobotVelocity,
         ChassisSpeeds fieldRelRobotVelocity,
         double targetSpeedRps,
         int maxIterations,
@@ -83,11 +83,14 @@ public final class ShotCalculator {
             
         for (int i = 0; i < maxIterations; i++) {
 
-            double dx = fieldRelRobotVelocity.vxMetersPerSecond * t;
-            // + 0.5 * fieldRelRobotAcceleration.axMetersPerSecondSquared * t * t;
+            double axMetersPerSecondSquared = (fieldRelRobotVelocity.vxMetersPerSecond - prevFieldRelRobotVelocity.vxMetersPerSecond) / Settings.DT;
+            double ayMetersPerSecondSquared = (fieldRelRobotVelocity.vyMetersPerSecond - prevFieldRelRobotVelocity.vyMetersPerSecond) / Settings.DT;
 
-            double dy = fieldRelRobotVelocity.vyMetersPerSecond * t;
-            // + 0.5 * fieldRelRobotAcceleration.ayMetersPerSecondSquared * t * t;
+            double dx = fieldRelRobotVelocity.vxMetersPerSecond * t
+            + 0.5 * axMetersPerSecondSquared * t * t;
+
+            double dy = fieldRelRobotVelocity.vyMetersPerSecond * t
+            + 0.5 * ayMetersPerSecondSquared * t * t;
 
             effectiveTarget = new Pose3d(
                 targetPose.getX() - dx,
@@ -119,11 +122,9 @@ public final class ShotCalculator {
             et.getX() - s.getX() 
         ); 
 
-        return new InterceptSolution(
-            effectiveTarget,
-            sol.launchPitchRad(),
-            sol.launchSpeed(),
-            sol.flightTimeSeconds(),
-            yaw);
+        return new AlignAngleSolution(
+            sol.launchPitchAngle(),
+            Rotation2d.fromRadians(yaw),
+            effectiveTarget);
     }
 }

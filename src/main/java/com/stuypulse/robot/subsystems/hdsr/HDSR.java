@@ -67,25 +67,29 @@ public abstract class HDSR extends SubsystemBase{
         targetAngle = angle;
     }
 
-    public void setShootAngle(double shootAngleRads) { // Use this method in commmand with the swerve, turret, and hdsr subsystems
-        double shootingAngle = shootAngleRads * 1180 / Math.PI;
-        if (Math.abs(shootingAngle % 360) > 40){
-            shootingAngle = 40;
-        } else if (Math.abs(shootingAngle % 360) < 5){
-            shootingAngle = 5;
-        }
-        this.shootAngle = Rotation2d.fromDegrees(shootingAngle);
+    public void setShootAngle(Rotation2d shootAngle) { // Use this method in commmand with the swerve, turret, and hdsr subsystems  
+        // if (shootAngle.getDegrees() > Constants.HDSR.MAX_ANGLE.getDegrees()) {
+        //     shootAngle = Constants.HDSR.MAX_ANGLE;
+        // } else if (shootAngle.getDegrees() < Constants.HDSR.MIN_ANGLE.getDegrees()) {
+        //     shootAngle = Constants.HDSR.MIN_ANGLE;
+        // } else {
+        this.shootAngle = shootAngle;
+        // }
     }
 
     public void setFerryAngle(Rotation2d ferryAngle) {
-        if (ferryAngle.getDegrees
+        // if (ferryAngle.getDegrees() > Constants.HDSR.MAX_ANGLE.getDegrees()) {
+        //     ferryAngle = Constants.HDSR.MAX_ANGLE;
+        // } else if (ferryAngle.getDegrees() < Constants.HDSR.MIN_ANGLE.getDegrees()) {
+        //     ferryAngle = Constants.HDSR.MIN_ANGLE;
+        // } else {
         this.ferryAngle = ferryAngle;
-        this.ferryAngle = ferryAngle;
+        // }
     }
  
     public void setTargetAngle() {
         switch (state) {
-            case STOW -> targetAngle = Constants.Hood.MIN_ANGLE;
+            case STOW -> targetAngle = Constants.HDSR.MIN_ANGLE;
             case SHOOT -> targetAngle = getShootAngle();
             case FERRY -> targetAngle = getFerryAngle();
         };
@@ -106,11 +110,11 @@ public abstract class HDSR extends SubsystemBase{
     
 
     public double getShootRPM() {
-        return Constants.Shooter.SHOT_RPM;
+        return Constants.HDSR.SHOT_RPM;
     }
 
     public double getFerryRPM() {
-        return Constants.Shooter.FERRY_RPM; 
+        return Constants.HDSR.FERRY_RPM; 
     }
 
     public boolean spunUp() {

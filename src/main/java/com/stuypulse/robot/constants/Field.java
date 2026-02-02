@@ -59,7 +59,7 @@ public interface Field {
     /**** EMPTY FIELD POSES ****/ // KNEE GUARDS
 
     Pose2d EMPTY_FIELD_POSE2D = new Pose2d(new Translation2d(-1, -1), new Rotation2d());
-    Pose3d hubPose3d = new Pose3d(13.048505, 4.027457, 1.8288, Rotation3d.kZero);
+    Pose3d hubPose3d = new Pose3d(4.632323, 4.048394, 1.8288, Rotation3d.kZero);
 
     public static void clearFieldObject(FieldObject2d fieldObject)  {
         fieldObject.setPose(EMPTY_FIELD_POSE2D);

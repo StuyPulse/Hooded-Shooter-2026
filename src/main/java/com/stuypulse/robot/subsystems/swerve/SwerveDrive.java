@@ -85,6 +85,7 @@ public class SwerveDrive extends SubsystemBase {
             module2ds[i].setPose(Robot.isBlue() ? module2ds[i].getPose() : Field.transformToOppositeAlliance(module2ds[i].getPose()));
         }
 
+
     }
 
     private Translation2d[] getModuleOffsets() {
@@ -243,8 +244,7 @@ public class SwerveDrive extends SubsystemBase {
     @Override
     public void periodic() {
         Odometry odometry = Odometry.getInstance();
-        Pose2d pose = odometry.getPose();
-        Rotation2d angle = odometry.getRotation();
+        // Pose2d pose = odometry.getPose();
 
         // for (int i = 0; i < modules.length; ++i) {
         //     Pose2d modulePose = new Pose2d(
@@ -254,9 +254,13 @@ public class SwerveDrive extends SubsystemBase {
         //     module2ds[i].setPose(Robot.isBlue() ? modulePose : Field.transformToOppositeAlliance(modulePose));
         // }
 
-        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroPitch());
+
+        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", odometry.getRotation().getDegrees());
         SmartDashboard.putNumber("Swerve/Gyro Pitch (deg)", getGyroPitch());
         SmartDashboard.putNumber("Swerve/Gyro Roll (deg)", getGyroRoll());
+
+        SmartDashboard.putNumber("Swerve/X Chassis Speeds (m/s)", getChassisSpeeds().vxMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/Y Chassis Speeds (m/s)", getChassisSpeeds().vyMetersPerSecond);
 
         SmartDashboard.putNumber("Swerve/X Acceleration (Gs)", gyro.getAccelerationX().getValueAsDouble());
         SmartDashboard.putNumber("Swerve/Y Acceleration (Gs)", gyro.getAccelerationY().getValueAsDouble());
