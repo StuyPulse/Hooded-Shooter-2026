@@ -53,8 +53,8 @@ public class Constants {
 
 
     public interface Hood {
-        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(0);
-        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(90);
+        Rotation2d MIN_ANGLE = Rotation2d.fromDegrees(5);
+        Rotation2d MAX_ANGLE = Rotation2d.fromDegrees(45);
     }
     public interface Shooter {
         double SHOT_RPM = 4000;

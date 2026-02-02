@@ -56,7 +56,7 @@ public interface Field {
         return newPoses;
     }
 
-    /**** EMPTY FIELD POSES ****/
+    /**** EMPTY FIELD POSES ****/ // KNEE GUARDS
 
     Pose2d EMPTY_FIELD_POSE2D = new Pose2d(new Translation2d(-1, -1), new Rotation2d());
     Pose3d hubPose3d = new Pose3d(13.048505, 4.027457, 1.8288, Rotation3d.kZero);

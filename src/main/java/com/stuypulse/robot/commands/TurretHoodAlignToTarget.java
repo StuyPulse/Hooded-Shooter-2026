@@ -78,7 +78,8 @@ public class TurretHoodAlignToTarget extends Command{
             Constants.Align.MAX_ITERATIONS,
             Constants.Align.TIME_TOLERANCE
         );
-        hdsr.setShootAngle(Rotation2d.fromRadians(sol.launchPitchRad())); // TODO: figure out angle range for hood
+
+        hdsr.setShootAngle(sol.launchPitchRad()); // TODO: figure out angle range for hood
         
         // this is the required yaw for shooting into the effective hub
         Rotation2d targetTurretAngle = Rotation2d.fromRadians(sol.requiredYaw()).minus(currentPose.getRotation());

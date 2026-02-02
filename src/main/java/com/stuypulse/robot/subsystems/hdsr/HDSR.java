@@ -67,11 +67,19 @@ public abstract class HDSR extends SubsystemBase{
         targetAngle = angle;
     }
 
-    public void setShootAngle(Rotation2d shootAngle) { // Use this method in commmand with the swerve, turret, and hdsr subsystems
-        this.shootAngle = shootAngle;
+    public void setShootAngle(double shootAngleRads) { // Use this method in commmand with the swerve, turret, and hdsr subsystems
+        double shootingAngle = shootAngleRads * 1180 / Math.PI;
+        if (Math.abs(shootingAngle % 360) > 40){
+            shootingAngle = 40;
+        } else if (Math.abs(shootingAngle % 360) < 5){
+            shootingAngle = 5;
+        }
+        this.shootAngle = Rotation2d.fromDegrees(shootingAngle);
     }
 
     public void setFerryAngle(Rotation2d ferryAngle) {
+        if (ferryAngle.getDegrees
+        this.ferryAngle = ferryAngle;
         this.ferryAngle = ferryAngle;
     }
  
