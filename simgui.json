@@ -36,9 +36,6 @@
     },
     "retained": {
       "SmartDashboard": {
-        "Autonomous": {
-          "open": true
-        },
         "open": true
       }
     },

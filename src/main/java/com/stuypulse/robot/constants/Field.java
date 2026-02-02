@@ -7,18 +7,14 @@
 
 package com.stuypulse.robot.constants;
 
-import com.stuypulse.stuylib.math.Vector2D;
 
-import com.stuypulse.robot.Robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 
@@ -63,7 +59,7 @@ public interface Field {
     /**** EMPTY FIELD POSES ****/
 
     Pose2d EMPTY_FIELD_POSE2D = new Pose2d(new Translation2d(-1, -1), new Rotation2d());
-    Pose3d hubPose3d = new Pose3d(4.461836, 3.951637, 1.8288, Rotation3d.kZero);
+    Pose3d hubPose3d = new Pose3d(13.048505, 4.027457, 1.8288, Rotation3d.kZero);
 
     public static void clearFieldObject(FieldObject2d fieldObject)  {
         fieldObject.setPose(EMPTY_FIELD_POSE2D);

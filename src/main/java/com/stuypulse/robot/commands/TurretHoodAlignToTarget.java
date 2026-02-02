@@ -38,12 +38,12 @@ public class TurretHoodAlignToTarget extends Command{
         swerve = SwerveDrive.getInstance();
 
         
-        addRequirements(hdsr, odometry);
+        addRequirements(hdsr);
     }
      
     @Override
     public void initialize() {
-
+   
     }
 
     @Override
@@ -81,8 +81,9 @@ public class TurretHoodAlignToTarget extends Command{
         hdsr.setShootAngle(Rotation2d.fromRadians(sol.launchPitchRad())); // TODO: figure out angle range for hood
         
         // this is the required yaw for shooting into the effective hub
-        Rotation2d targetTurretAngle = Rotation2d.fromRadians(sol.requiredYaw()).plus(currentPose.getRotation());
+        Rotation2d targetTurretAngle = Rotation2d.fromRadians(sol.requiredYaw()).minus(currentPose.getRotation());
 
+        SmartDashboard.putNumber("hdsr/calculated yaw", sol.requiredYaw() *  180 / Math.PI);
         // TODO: set turret angle here                       
     }
 
