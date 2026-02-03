@@ -77,13 +77,11 @@ public class TurretHoodAlignToTarget extends Command{
             RPS = Constants.HDSR.SHOT_RPM / 60;
         }
 
-        Pose2d currentPose = odometry.getPose();
+        Pose2d currentPose = Robot.isBlue() ? odometry.getPose() : Field.transformToOppositeAlliance(odometry.getPose());
         SmartDashboard.putNumber("hdsr/rps", RPS);
 
-        Rotation2d angle = Robot.isBlue() ? odometry.getRotation() : odometry.getRotation().plus(Rotation2d.k180deg);
-
         prevfieldRelRobotSpeeds = fieldRelRobotSpeeds;
-        fieldRelRobotSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.getChassisSpeeds(), angle);
+        fieldRelRobotSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.getChassisSpeeds(), currentPose.getRotation());
         
         AlignAngleSolution sol = ShotCalculator.solveShootOnTheFly(
             new Pose3d(currentPose), // TODO: add the field relative shooter offset on the robot
