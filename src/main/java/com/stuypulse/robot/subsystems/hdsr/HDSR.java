@@ -13,8 +13,6 @@ public abstract class HDSR extends SubsystemBase{
     private State state;
 
     private Rotation2d targetAngle;
-    private Rotation2d shootAngle;
-    private Rotation2d ferryAngle;
 
 
     static {
@@ -37,12 +35,11 @@ public abstract class HDSR extends SubsystemBase{
     public HDSR() {
         state = State.STOW;
         
-        targetAngle = Rotation2d.kZero;
-        shootAngle = Rotation2d.kZero;
-        ferryAngle = Rotation2d.kZero;
+        targetAngle = Constants.HDSR.MIN_ANGLE;
 
     }
 
+    public abstract double getCurrentRPS();
     public abstract Rotation2d getCurrentAngle();
 
     public State getState(){
@@ -51,50 +48,12 @@ public abstract class HDSR extends SubsystemBase{
 
     public void setState(State state){
         this.state = state;
-        setTargetAngle();
-    }
-    
-    public Rotation2d getShootAngle() {
-        return shootAngle;
     }
 
-    public Rotation2d getFerryAngle() {
-        return ferryAngle;
-    }
-
-    public void setAngle(Rotation2d angle) { // Debugging
-
+    public void setTargetAngle(Rotation2d angle) {
         targetAngle = angle;
     }
-
-    public void setShootAngle(Rotation2d shootAngle) { // Use this method in commmand with the swerve, turret, and hdsr subsystems  
-        // if (shootAngle.getDegrees() > Constants.HDSR.MAX_ANGLE.getDegrees()) {
-        //     shootAngle = Constants.HDSR.MAX_ANGLE;
-        // } else if (shootAngle.getDegrees() < Constants.HDSR.MIN_ANGLE.getDegrees()) {
-        //     shootAngle = Constants.HDSR.MIN_ANGLE;
-        // } else {
-        this.shootAngle = shootAngle;
-        // }
-    }
-
-    public void setFerryAngle(Rotation2d ferryAngle) {
-        // if (ferryAngle.getDegrees() > Constants.HDSR.MAX_ANGLE.getDegrees()) {
-        //     ferryAngle = Constants.HDSR.MAX_ANGLE;
-        // } else if (ferryAngle.getDegrees() < Constants.HDSR.MIN_ANGLE.getDegrees()) {
-        //     ferryAngle = Constants.HDSR.MIN_ANGLE;
-        // } else {
-        this.ferryAngle = ferryAngle;
-        // }
-    }
  
-    public void setTargetAngle() {
-        switch (state) {
-            case STOW -> targetAngle = Constants.HDSR.MIN_ANGLE;
-            case SHOOT -> targetAngle = getShootAngle();
-            case FERRY -> targetAngle = getFerryAngle();
-        };
-    }
-
     public Rotation2d getTargetAngle() {
         return targetAngle;
     }
@@ -107,7 +66,6 @@ public abstract class HDSR extends SubsystemBase{
         };
     }
 
-    
 
     public double getShootRPM() {
         return Constants.HDSR.SHOT_RPM;
@@ -122,12 +80,12 @@ public abstract class HDSR extends SubsystemBase{
         return (diff > Settings.Shooter.shooterRpmTolerance.getAsDouble()) ? true : false;
     }
 
-    public abstract double getFlywheelRPM();
-
     @Override 
     public void periodic() {
         SmartDashboard.putString("hdsr/state", getState().name());
-        SmartDashboard.putNumber("hdsr/targetShootAngle", getShootAngle().getDegrees());
+        SmartDashboard.putNumber("hdsr/targetAngle", getTargetAngle().getDegrees());
         SmartDashboard.putNumber("hdsr/currentAngle", getCurrentAngle().getDegrees());
+        SmartDashboard.putNumber("hdsr/currentRPM", getCurrentRPS() * 60);
+        SmartDashboard.putNumber("hdsr/targetRPM", getTargetRPM());
     }
 }

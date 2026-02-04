@@ -1,7 +1,6 @@
 package com.stuypulse.robot.constants;
 
 import com.pathplanner.lib.config.PIDConstants;
-import com.stuypulse.stuylib.network.SmartNumber;
 
 public interface Gains {
 
@@ -27,5 +26,25 @@ public interface Gains {
             double kV = 2.2119;
             double kA = 0.36249;
         }
+    }
+
+    public interface Hood {
+        double kP = 1.0;
+        double kI = 0.0;
+        double kD = 0.1;
+
+        double kS = 0.1;
+        double kV = 0.5;
+        double kA = 0.01;
+    }
+
+    public interface Shooter {
+        double kP = 1.0;
+        double kI = 0.0;
+        double kD = 0.1;
+
+        double kS = 0.1;
+        double kV = 0.5;
+        double kA = 0.01;
     }
 }

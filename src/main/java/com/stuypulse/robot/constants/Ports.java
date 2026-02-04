@@ -15,8 +15,9 @@ public interface Ports {
 
     public interface HDSR {
         int LEADER = 0;
-        int FOLLOWER = 1;
-        int HOOD_MOTOR = 2;
+        int FOLLOWER1 = 1;
+        int FOLLOWER2 = 2;
+        int HOOD_MOTOR = 3;
     }
 
     public interface Swerve {

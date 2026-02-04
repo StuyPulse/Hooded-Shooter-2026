@@ -36,12 +36,20 @@ import com.revrobotics.spark.config.SparkMaxConfig;
  */
 public interface Motors {
     public interface Shooter {
-         TalonFXConfig configs = new TalonFXConfig();
+         TalonFXConfig configs = new TalonFXConfig()
+            .withPIDConstants(Gains.Shooter.kP, Gains.Shooter.kI, Gains.Shooter.kD, 0)
+            .withFFConstants(Gains.Shooter.kS, Gains.Shooter.kV, Gains.Shooter.kA, 0)
+            .withNeutralMode(NeutralModeValue.Coast);
     }
 
 
     public interface Hood {
-         TalonFXConfig configs = new TalonFXConfig();
+         TalonFXConfig configs = new TalonFXConfig()
+            .withPIDConstants(Gains.Hood.kP, Gains.Hood.kI, Gains.Hood.kD, 0)
+            .withFFConstants(Gains.Hood.kS, Gains.Hood.kV, Gains.Hood.kA, 0)
+            .withNeutralMode(NeutralModeValue.Brake);
+
+
     }
 
     public interface Swerve {

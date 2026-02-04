@@ -70,15 +70,7 @@ public class TurretHoodAlignToTarget extends Command{
 
         targetPose = Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose);
 
-        double RPS = 0;
-        if (hdsr.getState() == State.FERRY){
-            RPS = Constants.HDSR.FERRY_RPM / 60;
-        } else if (hdsr.getState() == State.SHOOT){
-            RPS = Constants.HDSR.SHOT_RPM / 60;
-        }
-
         Pose2d currentPose = Robot.isBlue() ? odometry.getPose() : Field.transformToOppositeAlliance(odometry.getPose());
-        SmartDashboard.putNumber("hdsr/rps", RPS);
 
         prevfieldRelRobotSpeeds = fieldRelRobotSpeeds;
         fieldRelRobotSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(swerve.getChassisSpeeds(), currentPose.getRotation());
@@ -88,16 +80,15 @@ public class TurretHoodAlignToTarget extends Command{
             targetPose,
             prevfieldRelRobotSpeeds,
             fieldRelRobotSpeeds,
-            RPS, 
+            hdsr.getCurrentRPS(), 
             Constants.Align.MAX_ITERATIONS,
             Constants.Align.TIME_TOLERANCE
         );
 
-        hdsr.setShootAngle(sol.launchPitchAngle());
+        hdsr.setTargetAngle(sol.launchPitchAngle());
         
         // this is the required yaw for shooting into the effective hub
-        @SuppressWarnings("unused")
-        Rotation2d targetTurretAngle = sol.requiredYaw().minus(currentPose.getRotation());
+        Rotation2d targetTurretAngle = sol.requiredYaw().minus(currentPose.getRotation()) ;
 
         targetPose2d.setPose(targetPose.toPose2d());
         virtualHubPose2d.setPose(sol.estimateTargetPose().toPose2d());
